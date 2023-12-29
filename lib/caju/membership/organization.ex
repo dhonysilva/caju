@@ -8,6 +8,12 @@ defmodule Caju.Membership.Organization do
   schema "orgs" do
     field :name, :string
 
+    many_to_many :members, Caju.Accounts.User, join_through: Caju.Membership.Membership
+    has_many :memberships, Caju.Membership.Membership
+
+    has_one :ownership, Caju.Membership.Membership
+    has_one :onwer, through: [:ownership, :user]
+
     timestamps()
   end
 
