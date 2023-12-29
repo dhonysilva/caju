@@ -4,6 +4,7 @@ defmodule Caju.Membership.Organization do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
+
   schema "orgs" do
     field :name, :string
 
