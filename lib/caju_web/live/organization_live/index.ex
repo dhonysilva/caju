@@ -6,7 +6,7 @@ defmodule CajuWeb.OrganizationLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :orgs, Membership.list_orgs())}
+    {:ok, stream(socket, :organizations, Membership.list_organizations())}
   end
 
   @impl true
@@ -28,13 +28,13 @@ defmodule CajuWeb.OrganizationLive.Index do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Orgs")
+    |> assign(:page_title, "Listing Organizations")
     |> assign(:organization, nil)
   end
 
   @impl true
   def handle_info({CajuWeb.OrganizationLive.FormComponent, {:saved, organization}}, socket) do
-    {:noreply, stream_insert(socket, :orgs, organization)}
+    {:noreply, stream_insert(socket, :organizations, organization)}
   end
 
   @impl true
@@ -42,6 +42,6 @@ defmodule CajuWeb.OrganizationLive.Index do
     organization = Membership.get_organization!(id)
     {:ok, _} = Membership.delete_organization(organization)
 
-    {:noreply, stream_delete(socket, :orgs, organization)}
+    {:noreply, stream_delete(socket, :organizations, organization)}
   end
 end

@@ -1,23 +1,23 @@
 <.header>
-  Listing Orgs
+  Listing Organizations
   <:actions>
-    <.link patch={~p"/orgs/new"}>
+    <.link patch={~p"/organizations/new"}>
       <.button>New Organization</.button>
     </.link>
   </:actions>
 </.header>
 
 <.table
-  id="orgs"
-  rows={@streams.orgs}
-  row_click={fn {_id, organization} -> JS.navigate(~p"/orgs/#{organization}") end}
+  id="organizations"
+  rows={@streams.organizations}
+  row_click={fn {_id, organization} -> JS.navigate(~p"/organizations/#{organization}") end}
 >
   <:col :let={{_id, organization}} label="Name"><%= organization.name %></:col>
   <:action :let={{_id, organization}}>
     <div class="sr-only">
-      <.link navigate={~p"/orgs/#{organization}"}>Show</.link>
+      <.link navigate={~p"/organizations/#{organization}"}>Show</.link>
     </div>
-    <.link patch={~p"/orgs/#{organization}/edit"}>Edit</.link>
+    <.link patch={~p"/organizations/#{organization}/edit"}>Edit</.link>
   </:action>
   <:action :let={{id, organization}}>
     <.link
@@ -29,13 +29,13 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="organization-modal" show on_cancel={JS.patch(~p"/orgs")}>
+<.modal :if={@live_action in [:new, :edit]} id="organization-modal" show on_cancel={JS.patch(~p"/organizations")}>
   <.live_component
     module={CajuWeb.OrganizationLive.FormComponent}
     id={@organization.id || :new}
     title={@page_title}
     action={@live_action}
     organization={@organization}
-    patch={~p"/orgs"}
+    patch={~p"/organizations"}
   />
 </.modal>

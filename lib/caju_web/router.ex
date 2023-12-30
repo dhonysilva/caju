@@ -70,12 +70,12 @@ defmodule CajuWeb.Router do
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end
 
-    live "/orgs", OrganizationLive.Index, :index
-    live "/orgs/new", OrganizationLive.Index, :new
-    live "/orgs/:id/edit", OrganizationLive.Index, :edit
+    live "/organizations", OrganizationLive.Index, :index
+    live "/organizations/new", OrganizationLive.Index, :new
+    live "/organizations/:id/edit", OrganizationLive.Index, :edit
 
-    live "/orgs/:id", OrganizationLive.Show, :show
-    live "/orgs/:id/show/edit", OrganizationLive.Show, :edit
+    live "/organizations/:id", OrganizationLive.Show, :show
+    live "/organizations/:id/show/edit", OrganizationLive.Show, :edit
   end
 
   scope "/", CajuWeb do

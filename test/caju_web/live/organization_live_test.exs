@@ -16,20 +16,20 @@ defmodule CajuWeb.OrganizationLiveTest do
   describe "Index" do
     setup [:create_organization]
 
-    test "lists all orgs", %{conn: conn, organization: organization} do
-      {:ok, _index_live, html} = live(conn, ~p"/orgs")
+    test "lists all organizations", %{conn: conn, organization: organization} do
+      {:ok, _index_live, html} = live(conn, ~p"/organizations")
 
-      assert html =~ "Listing Orgs"
+      assert html =~ "Listing Organizations"
       assert html =~ organization.name
     end
 
     test "saves new organization", %{conn: conn} do
-      {:ok, index_live, _html} = live(conn, ~p"/orgs")
+      {:ok, index_live, _html} = live(conn, ~p"/organizations")
 
       assert index_live |> element("a", "New Organization") |> render_click() =~
                "New Organization"
 
-      assert_patch(index_live, ~p"/orgs/new")
+      assert_patch(index_live, ~p"/organizations/new")
 
       assert index_live
              |> form("#organization-form", organization: @invalid_attrs)
@@ -39,7 +39,7 @@ defmodule CajuWeb.OrganizationLiveTest do
              |> form("#organization-form", organization: @create_attrs)
              |> render_submit()
 
-      assert_patch(index_live, ~p"/orgs")
+      assert_patch(index_live, ~p"/organizations")
 
       html = render(index_live)
       assert html =~ "Organization created successfully"
@@ -47,12 +47,12 @@ defmodule CajuWeb.OrganizationLiveTest do
     end
 
     test "updates organization in listing", %{conn: conn, organization: organization} do
-      {:ok, index_live, _html} = live(conn, ~p"/orgs")
+      {:ok, index_live, _html} = live(conn, ~p"/organizations")
 
-      assert index_live |> element("#orgs-#{organization.id} a", "Edit") |> render_click() =~
+      assert index_live |> element("#organizations-#{organization.id} a", "Edit") |> render_click() =~
                "Edit Organization"
 
-      assert_patch(index_live, ~p"/orgs/#{organization}/edit")
+      assert_patch(index_live, ~p"/organizations/#{organization}/edit")
 
       assert index_live
              |> form("#organization-form", organization: @invalid_attrs)
@@ -62,7 +62,7 @@ defmodule CajuWeb.OrganizationLiveTest do
              |> form("#organization-form", organization: @update_attrs)
              |> render_submit()
 
-      assert_patch(index_live, ~p"/orgs")
+      assert_patch(index_live, ~p"/organizations")
 
       html = render(index_live)
       assert html =~ "Organization updated successfully"
@@ -70,10 +70,10 @@ defmodule CajuWeb.OrganizationLiveTest do
     end
 
     test "deletes organization in listing", %{conn: conn, organization: organization} do
-      {:ok, index_live, _html} = live(conn, ~p"/orgs")
+      {:ok, index_live, _html} = live(conn, ~p"/organizations")
 
-      assert index_live |> element("#orgs-#{organization.id} a", "Delete") |> render_click()
-      refute has_element?(index_live, "#orgs-#{organization.id}")
+      assert index_live |> element("#organizations-#{organization.id} a", "Delete") |> render_click()
+      refute has_element?(index_live, "#organizations-#{organization.id}")
     end
   end
 
@@ -81,19 +81,19 @@ defmodule CajuWeb.OrganizationLiveTest do
     setup [:create_organization]
 
     test "displays organization", %{conn: conn, organization: organization} do
-      {:ok, _show_live, html} = live(conn, ~p"/orgs/#{organization}")
+      {:ok, _show_live, html} = live(conn, ~p"/organizations/#{organization}")
 
       assert html =~ "Show Organization"
       assert html =~ organization.name
     end
 
     test "updates organization within modal", %{conn: conn, organization: organization} do
-      {:ok, show_live, _html} = live(conn, ~p"/orgs/#{organization}")
+      {:ok, show_live, _html} = live(conn, ~p"/organizations/#{organization}")
 
       assert show_live |> element("a", "Edit") |> render_click() =~
                "Edit Organization"
 
-      assert_patch(show_live, ~p"/orgs/#{organization}/show/edit")
+      assert_patch(show_live, ~p"/organizations/#{organization}/show/edit")
 
       assert show_live
              |> form("#organization-form", organization: @invalid_attrs)
@@ -103,7 +103,7 @@ defmodule CajuWeb.OrganizationLiveTest do
              |> form("#organization-form", organization: @update_attrs)
              |> render_submit()
 
-      assert_patch(show_live, ~p"/orgs/#{organization}")
+      assert_patch(show_live, ~p"/organizations/#{organization}")
 
       html = render(show_live)
       assert html =~ "Organization updated successfully"

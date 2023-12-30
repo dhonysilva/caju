@@ -2,7 +2,7 @@
   Organization <%= @organization.id %>
   <:subtitle>This is a organization record from your database.</:subtitle>
   <:actions>
-    <.link patch={~p"/orgs/#{@organization}/show/edit"} phx-click={JS.push_focus()}>
+    <.link patch={~p"/organizations/#{@organization}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit organization</.button>
     </.link>
   </:actions>
@@ -12,15 +12,15 @@
   <:item title="Name"><%= @organization.name %></:item>
 </.list>
 
-<.back navigate={~p"/orgs"}>Back to orgs</.back>
+<.back navigate={~p"/organizations"}>Back to organizations</.back>
 
-<.modal :if={@live_action == :edit} id="organization-modal" show on_cancel={JS.patch(~p"/orgs/#{@organization}")}>
+<.modal :if={@live_action == :edit} id="organization-modal" show on_cancel={JS.patch(~p"/organizations/#{@organization}")}>
   <.live_component
     module={CajuWeb.OrganizationLive.FormComponent}
     id={@organization.id}
     title={@page_title}
     action={@live_action}
     organization={@organization}
-    patch={~p"/orgs/#{@organization}"}
+    patch={~p"/organizations/#{@organization}"}
   />
 </.modal>

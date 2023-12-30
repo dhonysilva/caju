@@ -11,10 +11,8 @@ defmodule Caju.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
 
-    belongs_to :org, Caju.Membership.Organization
-
-    has_many :org_memberships, Caju.Membership.Membership
-    has_many :orgs, through: [:org_memberships, :org]
+    many_to_many :organizations, Caju.Membership.Organization,
+      join_through: Caju.Membership.Membership
 
     timestamps()
   end

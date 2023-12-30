@@ -9,15 +9,15 @@ defmodule Caju.Membership do
   alias Caju.Membership.Organization
 
   @doc """
-  Returns the list of orgs.
+  Returns the list of organizations.
 
   ## Examples
 
-      iex> list_orgs()
+      iex> list_organizations()
       [%Organization{}, ...]
 
   """
-  def list_orgs do
+  def list_organizations do
     Repo.all(Organization)
   end
 
