@@ -17,6 +17,12 @@ defmodule Caju.Accounts.User do
     timestamps()
   end
 
+  def changeset(struct, params \\ %{}) do
+    struct
+    |> Ecto.Changeset.cast(params, [:id])
+    |> Ecto.Changeset.cast_assoc(:organizations, required: true)
+  end
+
   @doc """
   A user changeset for registration.
 
