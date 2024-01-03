@@ -115,6 +115,7 @@ defmodule CajuWeb.Router do
     end
 
     resources "/products", ProductController
+    resources "/categories", CategoryController
 
     resources "/cart_items", CartItemController, only: [:create, :delete]
 
