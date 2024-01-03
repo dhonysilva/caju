@@ -6,6 +6,11 @@
 <% else %>
   <.header>
     My Cart
+    <:actions>
+      <.link href={~p"/orders"} method="post">
+        <.button>Complete order</.button>
+      </.link>
+    </:actions>
   </.header>
 
   <.simple_form :let={f} for={@changeset} action={~p"/cart"}>
