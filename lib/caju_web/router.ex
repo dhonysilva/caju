@@ -101,6 +101,16 @@ defmodule CajuWeb.Router do
 
     live "/organizations/:id", OrganizationLive.Show, :show
     live "/organizations/:id/show/edit", OrganizationLive.Show, :edit
+
+    resources "/products", ProductController
+    resources "/categories", CategoryController
+
+    resources "/cart_items", CartItemController, only: [:create, :delete]
+
+    get "/cart", CartController, :show
+    put "/cart", CartController, :update
+
+    resources "/orders", OrderController, only: [:create, :show]
   end
 
   scope "/", CajuWeb do
@@ -113,15 +123,5 @@ defmodule CajuWeb.Router do
       live "/users/confirm/:token", UserConfirmationLive, :edit
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
-
-    resources "/products", ProductController
-    resources "/categories", CategoryController
-
-    resources "/cart_items", CartItemController, only: [:create, :delete]
-
-    get "/cart", CartController, :show
-    put "/cart", CartController, :update
-
-    resources "/orders", OrderController, only: [:create, :show]
   end
 end
