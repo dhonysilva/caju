@@ -7,6 +7,11 @@ defmodule Caju.Membership.Site do
   schema "sites" do
     field :name, :string
 
+    many_to_many :members, Caju.Accounts.User, join_through: Caju.Membership.Membership
+    has_many :memberships, Caju.Membership.Membership
+    has_one :ownership, Caju.Membership.Membership, where: [role: :owner]
+    has_one :owner, through: [:ownership, :user]
+
     timestamps()
   end
 
