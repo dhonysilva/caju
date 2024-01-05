@@ -93,6 +93,9 @@ defmodule CajuWeb.Router do
       on_mount: [{CajuWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+
+      # Survey Live
+      live "/survey", SurveyLive, :index
     end
 
     live "/organizations", OrganizationLive.Index, :index
