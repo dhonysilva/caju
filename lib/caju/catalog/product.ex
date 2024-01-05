@@ -14,6 +14,8 @@ defmodule Caju.Catalog.Product do
 
     many_to_many :categories, Category, join_through: "product_categories", on_replace: :delete
 
+    has_many :ratings, Caju.Survey.Rating
+
     timestamps()
   end
 

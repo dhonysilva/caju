@@ -22,6 +22,12 @@ defmodule Caju.Catalog do
     Repo.all(Product)
   end
 
+  # Não está funcionando durante os testes com o iex
+  def list_products_with_user_rating(user) do
+    Product.Query.with_user_ratings(user)
+    |> Repo.all()
+  end
+
   @doc """
   Gets a single product.
 
