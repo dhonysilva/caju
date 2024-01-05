@@ -98,6 +98,9 @@ defmodule CajuWeb.Router do
       live "/survey", SurveyLive, :index
     end
 
+    # Site
+    resources "/sites", SiteController
+
     live "/organizations", OrganizationLive.Index, :index
     live "/organizations/new", OrganizationLive.Index, :new
     live "/organizations/:id/edit", OrganizationLive.Index, :edit
