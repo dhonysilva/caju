@@ -5,11 +5,12 @@ defmodule Caju.Membership.Invitation do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "invitations" do
-    field :role, :string
+    field :role, Ecto.Enum, values: [:owner, :admin, :viewer]
     field :email, :string
     field :invitation_id, :string
-    field :site_id, :binary_id
-    field :inviter_id, :binary_id
+
+    belongs_to :site, Caju.Membership.Site
+    belongs_to :inviter, Caju.Accounts.User
 
     timestamps()
   end
