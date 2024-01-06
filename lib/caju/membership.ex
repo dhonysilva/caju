@@ -4,6 +4,7 @@ defmodule Caju.Membership do
   """
 
   import Ecto.Query, warn: false
+  alias Caju.Membership
   alias Caju.Repo
 
   alias Caju.Membership.Organization
@@ -145,10 +146,20 @@ defmodule Caju.Membership do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_site(attrs \\ %{}) do
-    %Site{}
-    |> Site.changeset(attrs)
-    |> Repo.insert()
+
+  # def create_site(_user, attrs \\ %{}) do
+  #   %Site{}
+  #   |> Site.changeset(attrs)
+  #   |> Repo.insert()
+  # end
+
+  def create_site(user, params) do
+    Ecto.Multi.new()
+    |> Ecto.Multi.insert(:site, Site.new(params))
+    |> Ecto.Multi.insert(:site_membership, fn %{site: site} ->
+      Membership.Membership.new(site, user)
+    end)
+    |> Repo.transaction()
   end
 
   @doc """

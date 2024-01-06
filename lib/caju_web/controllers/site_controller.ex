@@ -15,8 +15,10 @@ defmodule CajuWeb.SiteController do
   end
 
   def create(conn, %{"site" => site_params}) do
-    case Membership.create_site(site_params) do
-      {:ok, site} ->
+    user = conn.assigns[:current_user]
+
+    case Membership.create_site(user, site_params) do
+      {:ok, %{site: site}} ->
         conn
         |> put_flash(:info, "Site created successfully.")
         |> redirect(to: ~p"/sites/#{site}")

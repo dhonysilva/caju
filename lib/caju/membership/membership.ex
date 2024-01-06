@@ -16,7 +16,6 @@ defmodule Caju.Membership.Membership do
     field :role, Ecto.Enum, values: @roles
 
     belongs_to :user, Caju.Accounts.User
-    belongs_to :organization, Caju.Membership.Organization
     belongs_to :site, Caju.Membership.Site
 
     timestamps()
@@ -32,7 +31,7 @@ defmodule Caju.Membership.Membership do
   def new(site, user) do
     %__MODULE__{}
     |> change()
-    |> put_assoc(:organizsiteation, site)
+    |> put_assoc(:site, site)
     |> put_assoc(:user, user)
   end
 
