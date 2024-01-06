@@ -1,0 +1,8 @@
+<.header>
+  Edit Site <%= @site.id %>
+  <:subtitle>Use this form to manage site records in your database.</:subtitle>
+</.header>
+
+<.site_form changeset={@changeset} action={~p"/sites/#{@site}"} />
+
+<.back navigate={~p"/sites"}>Back to sites</.back>

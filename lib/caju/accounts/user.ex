@@ -14,6 +14,9 @@ defmodule Caju.Accounts.User do
     many_to_many :organizations, Caju.Membership.Organization,
       join_through: Caju.Membership.Membership
 
+    has_many :site_memberships, Caju.Membership.Membership
+    has_many :sites, through: [:site_memberships, :site]
+
     timestamps()
   end
 

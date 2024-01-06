@@ -1,0 +1,15 @@
+<.header>
+  Site <%= @site.id %>
+  <:subtitle>This is a site record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/sites/#{@site}/edit"}>
+      <.button>Edit site</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @site.name %></:item>
+</.list>
+
+<.back navigate={~p"/sites"}>Back to sites</.back>

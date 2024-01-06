@@ -17,4 +17,18 @@ defmodule Caju.MembershipFixtures do
 
     organization
   end
+
+  @doc """
+  Generate a site.
+  """
+  def site_fixture(attrs \\ %{}) do
+    {:ok, site} =
+      attrs
+      |> Enum.into(%{
+        name: "some name"
+      })
+      |> Caju.Membership.create_site()
+
+    site
+  end
 end

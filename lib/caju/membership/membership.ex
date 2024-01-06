@@ -16,7 +16,7 @@ defmodule Caju.Membership.Membership do
     field :role, Ecto.Enum, values: @roles
 
     belongs_to :user, Caju.Accounts.User
-    belongs_to :organization, Caju.Membership.Organization
+    belongs_to :site, Caju.Membership.Site
 
     timestamps()
   end
@@ -24,14 +24,14 @@ defmodule Caju.Membership.Membership do
   @doc false
   def changeset(membership, attrs) do
     membership
-    |> cast(attrs, [:role, :user_id, :organization_id])
-    |> validate_required([:role, :user_id, :organization_id])
+    |> cast(attrs, [:role, :user_id, :site_id])
+    |> validate_required([:role, :user_id, :site_id])
   end
 
-  def new(organization, user) do
+  def new(site, user) do
     %__MODULE__{}
     |> change()
-    |> put_assoc(:organization, organization)
+    |> put_assoc(:site, site)
     |> put_assoc(:user, user)
   end
 
