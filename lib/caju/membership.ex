@@ -147,12 +147,6 @@ defmodule Caju.Membership do
 
   """
 
-  # def create_site(_user, attrs \\ %{}) do
-  #   %Site{}
-  #   |> Site.changeset(attrs)
-  #   |> Repo.insert()
-  # end
-
   def create_site(user, params) do
     Ecto.Multi.new()
     |> Ecto.Multi.insert(:site, Site.new(params))
