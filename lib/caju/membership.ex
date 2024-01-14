@@ -131,6 +131,16 @@ defmodule Caju.Membership do
     )
   end
 
+  def get_for_user!(user_id, domain, roles \\ [:owner, :admin, :viwer]) do
+    if :super_admin in roles and Accounts.is_super_admin?(user_id) do
+      get_by_domain(domain)
+    else
+      user_id
+      |> get_for_user_q(domain, List.delete(roles, :super_admin))
+      |> Repo.one()
+    end
+  end
+
   @doc """
   Gets a single site.
 
