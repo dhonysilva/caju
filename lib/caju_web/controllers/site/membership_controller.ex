@@ -1,4 +1,4 @@
-defmodule CajuWeb.MembershipController do
+defmodule CajuWeb.Site.MembershipController do
   use CajuWeb, :controller
   use Caju.Repo
   alias Caju.Membership
@@ -6,7 +6,7 @@ defmodule CajuWeb.MembershipController do
   def invite_member_form(conn, _params) do
     site =
       conn.assigns.current_user.id
-      |> Membership.get_for_user!(conn.assigns.site.domain)
+      |> Membership.get_for_user!(conn.assigns.site.name)
       |> Caju.Repo.preload(:owner)
 
     render(

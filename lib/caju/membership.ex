@@ -5,6 +5,7 @@ defmodule Caju.Membership do
 
   import Ecto.Query, warn: false
   alias Caju.Membership
+  alias Caju.Accounts
   alias Caju.Repo
 
   alias Caju.Membership.Organization
@@ -118,6 +119,14 @@ defmodule Caju.Membership do
     Repo.all(Site)
   end
 
+  def get_by_domain(name) do
+    Repo.get_by(Site, name: name)
+  end
+
+  def get_by_domain!(name) do
+    Repo.get_by!(Site, name: name)
+  end
+
   def is_member?(user_id, site) do
     role(user_id, site) !== nil
   end
@@ -131,14 +140,25 @@ defmodule Caju.Membership do
     )
   end
 
-  def get_for_user!(user_id, domain, roles \\ [:owner, :admin, :viwer]) do
+  def get_for_user!(user_id, name, roles \\ [:owner, :admin, :viwer]) do
     if :super_admin in roles and Accounts.is_super_admin?(user_id) do
-      get_by_domain(domain)
+      get_by_domain(name)
     else
       user_id
-      |> get_for_user_q(domain, List.delete(roles, :super_admin))
+      |> get_for_user_q(name, List.delete(roles, :super_admin))
       |> Repo.one()
     end
+  end
+
+  defp get_for_user_q(user_id, site_id, roles) do
+    from(s in Site,
+      join: sm in Membership.Membership,
+      on: sm.site_id == s.id,
+      where: sm.user_id == ^user_id,
+      where: sm.role in ^roles,
+      where: s.id == ^site_id,
+      select: s
+    )
   end
 
   @doc """

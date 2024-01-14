@@ -31,16 +31,14 @@ defmodule Caju.Accounts do
     Repo.get_by(Accounts.User, opts)
   end
 
-  on_full_build do
-    def is_super_admin?(nil), do: false
-    def is_super_admin?(%Caju.Accounts.User{id: id}), do: is_super_admin?(id)
+  def is_super_admin?(nil), do: false
+  def is_super_admin?(%Caju.Accounts.User{id: id}), do: is_super_admin?(id)
 
-    def is_super_admin?(user_id) when is_integer(user_id) do
-      user_id in Application.get_env(:caju, :super_admin_user_ids)
-    end
-  else
-    def is_super_admin?(_), do: false
+  def is_super_admin?(user_id) when is_integer(user_id) do
+    user_id in Application.get_env(:caju, :super_admin_user_ids)
   end
+
+  def is_super_admin?(_), do: false
 
   @doc """
   Gets a user by email and password.
