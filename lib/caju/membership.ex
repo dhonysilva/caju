@@ -118,6 +118,19 @@ defmodule Caju.Membership do
     Repo.all(Site)
   end
 
+  def is_member?(user_id, site) do
+    role(user_id, site) !== nil
+  end
+
+  def role(user_id, site) do
+    Repo.one(
+      from(sm in Membership.Membership,
+        where: sm.user_id == ^user_id and sm.site_id == ^site.id,
+        select: sm.role
+      )
+    )
+  end
+
   @doc """
   Gets a single site.
 

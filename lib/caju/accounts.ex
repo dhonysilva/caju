@@ -4,6 +4,7 @@ defmodule Caju.Accounts do
   """
 
   import Ecto.Query, warn: false
+  alias Caju.Accounts
   alias Caju.Repo
 
   alias Caju.Accounts.{User, UserToken, UserNotifier}
@@ -24,6 +25,10 @@ defmodule Caju.Accounts do
   """
   def get_user_by_email(email) when is_binary(email) do
     Repo.get_by(User, email: email)
+  end
+
+  def find_user_by(opts) do
+    Repo.get_by(Accounts.User, opts)
   end
 
   @doc """
