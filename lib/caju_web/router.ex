@@ -38,6 +38,11 @@ defmodule CajuWeb.Router do
     end
   end
 
+  pipeline :app_layout do
+    # plug :put_root_layout, html: {CajuWeb.LayoutView, :app}
+    # plug :put_root_layout, html: {CajuWeb.Layouts, :app}
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -46,6 +51,9 @@ defmodule CajuWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    get "/hello", HelloController, :index
+    get "/hello/:messenger", HelloController, :show
   end
 
   # Other scopes may use custom stacks.
@@ -100,6 +108,13 @@ defmodule CajuWeb.Router do
 
     # Site
     resources "/sites", SiteController
+
+    # Resourses of Site and settings
+    get "/sites/:website/memberships/invite", Site.MembershipController, :invite_member_form
+
+    get "/:website/settings", SiteController, :settings
+    get "/:website/settings/general", SiteController, :settings_general
+    get "/:website/settings/people", SiteController, :settings_people
 
     live "/organizations", OrganizationLive.Index, :index
     live "/organizations/new", OrganizationLive.Index, :new
