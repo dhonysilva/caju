@@ -3,7 +3,9 @@ defmodule CajuWeb.HelloController do
 
   # Here on this action, we don't have params
   def index(conn, _params) do
-    render(conn, :index)
+    conn
+    |> put_layout(html: :admin)
+    |> render(:index)
   end
 
   # Here, this action is receiving a param which is the name of the messenger.
