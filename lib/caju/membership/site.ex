@@ -6,6 +6,7 @@ defmodule Caju.Membership.Site do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
+
   schema "sites" do
     field :name, :string
 
@@ -21,9 +22,9 @@ defmodule Caju.Membership.Site do
   def new(params), do: changeset(%__MODULE__{}, params)
 
   @doc false
-  def changeset(site, attrs) do
+  def changeset(site, attrs \\ %{}) do
     site
-    |> cast(attrs, [:name])
-    |> validate_required([:name])
+    |> cast(attrs, [:id, :name])
+    |> validate_required([:id, :name])
   end
 end
