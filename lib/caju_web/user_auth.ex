@@ -33,6 +33,7 @@ defmodule CajuWeb.UserAuth do
     |> renew_session()
     |> put_token_in_session(token)
     |> maybe_write_remember_me_cookie(token, params)
+    |> put_session(:current_user_id, user.id)
     |> redirect(to: user_return_to || signed_in_path(conn))
   end
 
