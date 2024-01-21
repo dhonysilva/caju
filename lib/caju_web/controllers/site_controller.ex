@@ -1,12 +1,19 @@
 defmodule CajuWeb.SiteController do
   use CajuWeb, :controller
 
+  use Caju.Repo
   alias Caju.Membership
   alias Caju.Membership.Site
 
+  plug CajuWeb.AuthorizeSiteAccess,
+       [:owner, :admin, :super_admin] when action not in [:new, :create_site]
+
   def index(conn, _params) do
     sites = Membership.list_sites()
-    render(conn, :index, sites: sites)
+
+    conn
+    |> put_layout(html: :site_settings)
+    |> render(:index, sites: sites)
   end
 
   def new(conn, _params) do
@@ -60,5 +67,39 @@ defmodule CajuWeb.SiteController do
     conn
     |> put_flash(:info, "Site deleted successfully.")
     |> redirect(to: ~p"/sites")
+  end
+
+  # Functions related to Settings
+
+  def settings(conn, %{"website" => website}) do
+    redirect(conn, to: ~p"/#{website}/settings/general")
+  end
+
+  def settings_general(conn, _params) do
+    site = conn.assigns[:site]
+
+    conn
+    |> put_layout(html: :site_settings)
+    |> render(:settings_general,
+      site: site,
+      changeset: Caju.Membership.Site.changeset(site, %{})
+    )
+  end
+
+  def settings_people(conn, _params) do
+    site =
+      conn.assigns[:site]
+      |> Repo.preload(memberships: :user, invitations: [])
+
+    IO.inspect(site)
+
+    conn
+    # |> render("settings_people.html",
+    #   site: site,
+    #   dogfood_page_path: "/:dashboard/settings/people",
+    #   layout: {SiteWeb.LayoutView, "site_settings.html"}
+    # )
+    |> put_layout(html: :site_settings)
+    |> render(:settings_people, site: site)
   end
 end
