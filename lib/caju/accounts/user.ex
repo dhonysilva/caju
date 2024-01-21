@@ -11,19 +11,16 @@ defmodule Caju.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
 
-    many_to_many :organizations, Caju.Membership.Organization,
-      join_through: Caju.Membership.Membership
-
     has_many :site_memberships, Caju.Membership.Membership
     has_many :sites, through: [:site_memberships, :site]
 
     timestamps()
   end
 
-  def changeset(struct, params \\ %{}) do
-    struct
-    |> Ecto.Changeset.cast(params, [:id])
-    |> Ecto.Changeset.cast_assoc(:organizations, required: true)
+  def changeset(user, attrs \\ %{}) do
+    user
+    |> cast(attrs, [:email, :name])
+    |> validate_required([:email, [:name]])
   end
 
   @doc """
