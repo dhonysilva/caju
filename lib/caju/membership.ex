@@ -140,7 +140,7 @@ defmodule Caju.Membership do
     )
   end
 
-  def get_for_user!(user_id, name, roles \\ [:owner, :admin, :viwer]) do
+  def get_for_user!(user_id, name, roles \\ [:owner, :admin, :viewer]) do
     if :super_admin in roles and Accounts.is_super_admin?(user_id) do
       get_by_domain(name)
     else

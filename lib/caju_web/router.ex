@@ -111,6 +111,7 @@ defmodule CajuWeb.Router do
 
     # Resourses of Site and settings
     get "/sites/:website/memberships/invite", Site.MembershipController, :invite_member_form
+    post "/sites/:website/memberships/invite", Site.MembershipController, :invite_member
 
     get "/:website/settings", SiteController, :settings
     get "/:website/settings/general", SiteController, :settings_general

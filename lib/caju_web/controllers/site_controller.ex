@@ -91,8 +91,6 @@ defmodule CajuWeb.SiteController do
       conn.assigns[:site]
       |> Repo.preload(memberships: :user, invitations: [])
 
-    IO.inspect(site)
-
     conn
     # |> render("settings_people.html",
     #   site: site,

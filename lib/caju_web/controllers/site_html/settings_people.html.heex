@@ -17,7 +17,8 @@
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-sm font-medium text-gray-900 dark:text-gray-50 truncate">
-                <%= membership.user.name %>
+                <%= membership.user.id %>
+                <%!-- users don't have name yet --%>
               </p>
               <p class="text-sm text-gray-400 truncate">
                 <%= membership.user.email %>
@@ -102,10 +103,14 @@
   </div>
 
   <div class="mt-8">
-    <PlausibleWeb.Components.Generic.button_link href={
+    <%!-- <PlausibleWeb.Components.Generic.button_link href={
       Routes.membership_path(@conn, :invite_member_form, @site.domain)
     }>
       <Heroicons.user_plus solid class="w-5 h-5" /> Invite
-    </PlausibleWeb.Components.Generic.button_link>
+    </PlausibleWeb.Components.Generic.button_link> --%>
+
+    <.link href={~p"/sites/#{@site.id}/memberships/invite"}>
+      <.button>Invite</.button>
+    </.link>
   </div>
 </div>
