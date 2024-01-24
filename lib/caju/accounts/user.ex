@@ -10,6 +10,7 @@ defmodule Caju.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+    field :email_verified, :boolean
 
     has_many :site_memberships, Caju.Membership.Membership
     has_many :sites, through: [:site_memberships, :site]
