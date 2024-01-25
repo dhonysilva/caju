@@ -8,14 +8,6 @@ defmodule CajuWeb.SiteController do
   plug CajuWeb.AuthorizeSiteAccess,
        [:owner, :admin, :super_admin] when action not in [:new, :create_site]
 
-  def index(conn, _params) do
-    sites = Membership.list_sites()
-
-    conn
-    |> put_layout(html: :site_settings)
-    |> render(:index, sites: sites)
-  end
-
   def new(conn, _params) do
     changeset = Membership.change_site(%Site{})
     render(conn, :new, changeset: changeset)
@@ -36,6 +28,9 @@ defmodule CajuWeb.SiteController do
   end
 
   def show(conn, %{"id" => id}) do
+    r = conn.request_path
+    IO.inspect(r, label: "request_path dentro da action Site :show")
+    IO.inspect(conn, label: "Conn dentro da action Site :show")
     site = Membership.get_site!(id)
     render(conn, :show, site: site)
   end
