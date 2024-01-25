@@ -104,6 +104,8 @@ defmodule CajuWeb.Router do
 
       # Survey Live
       live "/survey", SurveyLive, :index
+
+      live "/sites", SiteLive, :index, as: :site
     end
 
     # Site

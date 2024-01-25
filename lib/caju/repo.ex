@@ -3,6 +3,8 @@ defmodule Caju.Repo do
     otp_app: :caju,
     adapter: Ecto.Adapters.Postgres
 
+  use Scrivener, page_size: 24
+
   defmacro __using__(_) do
     quote do
       alias Caju.Repo

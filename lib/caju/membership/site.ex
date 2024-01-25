@@ -16,6 +16,11 @@ defmodule Caju.Membership.Site do
     has_one :ownership, Caju.Membership.Membership, where: [role: :owner]
     has_one :owner, through: [:ownership, :user]
 
+    # Used in the context of paginated sites list to order in relation to
+    # user's membership state. Currently it can be either "invitation",
+    # "pinned_site" or "site", where invitations are first.
+    field :entry_type, :string, virtual: true
+
     timestamps()
   end
 

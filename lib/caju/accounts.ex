@@ -31,6 +31,17 @@ defmodule Caju.Accounts do
     Repo.get_by(Accounts.User, opts)
   end
 
+  def user_owns_sites?(user) do
+    Repo.exists?(
+      from(s in Caju.Membership.Site,
+        join: sm in Caju.Membership.Membership,
+        on: sm.site_id == s.id,
+        where: sm.user_id == ^user.id,
+        where: sm.role == :owner
+      )
+    )
+  end
+
   def is_super_admin?(nil), do: false
   def is_super_admin?(%Caju.Accounts.User{id: id}), do: is_super_admin?(id)
 

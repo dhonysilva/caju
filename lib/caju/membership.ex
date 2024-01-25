@@ -10,6 +10,8 @@ defmodule Caju.Membership do
 
   alias Caju.Membership.Organization
 
+  @type list_opt() :: {:filter_by_domain, String.t()}
+
   @doc """
   Returns the list of organizations.
 
@@ -159,6 +161,53 @@ defmodule Caju.Membership do
       where: s.id == ^site_id,
       select: s
     )
+  end
+
+  # @spec list(Accounts.User.t(), map(), [list_opt()]) :: Scrivener.Page.t()
+  # def list(user, _pagination_params, opts \\ []) do
+  #   _domain_filter = Keyword.get(opts, :filter_by_domain)
+
+  #   from(s in Site,
+  #     inner_join: sm in assoc(s, :memberships),
+  #     on: sm.user_id == ^user.id,
+  #     select: s,
+  #     order_by: [asc: s.name],
+  #     preload: [memberships: sm]
+  #   )
+  # end
+
+  @spec list_with_invitations(Accounts.User.t(), map(), [list_opt()]) :: Scrivener.Page.t()
+  def list_with_invitations(user, pagination_params, opts \\ []) do
+    _domain_filter = Keyword.get(opts, :filter_by_domain)
+
+    result =
+      from(s in Site,
+        left_join: i in assoc(s, :invitations),
+        on: i.email == ^user.email,
+        left_join: sm in assoc(s, :memberships),
+        on: sm.user_id == ^user.id,
+        where: not is_nil(sm.id) or not is_nil(i.id),
+        select: s,
+        order_by: [asc: s.name],
+        preload: [memberships: sm, invitations: i]
+      )
+      |> Repo.paginate(pagination_params)
+
+    # Populating `site` preload on `invitation`
+    # without requesting it from database.
+    # Necessary for invitation modals logic.
+    entries =
+      Enum.map(result.entries, fn
+        %{invitations: [invitation]} = site ->
+          site = %{site | invitations: [], memberships: []}
+          invitation = %{invitation | site: site}
+          %{site | invitations: [invitation]}
+
+        site ->
+          site
+      end)
+
+    %{result | entries: entries}
   end
 
   @doc """
