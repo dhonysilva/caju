@@ -54,7 +54,8 @@ defmodule Caju.MixProject do
       {:nanoid, "~> 2.0.5"},
       {:sentry, "~> 10.0"},
       {:hackney, "~> 1.19"},
-      {:opentelemetry_phoenix, "~> 1.1"}
+      {:opentelemetry_phoenix, "~> 1.1"},
+      {:scrivener_ecto, "~> 2.0"}
     ]
   end
 
