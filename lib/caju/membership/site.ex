@@ -29,7 +29,7 @@ defmodule Caju.Membership.Site do
   @doc false
   def changeset(site, attrs \\ %{}) do
     site
-    |> cast(attrs, [:id, :name])
-    |> validate_required([:id, :name])
+    |> cast(attrs, [:name])
+    |> validate_required([:name])
   end
 end
