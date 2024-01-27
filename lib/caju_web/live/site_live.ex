@@ -35,7 +35,7 @@ defmodule CajuWeb.SiteLive do
   end
 
   def render(assigns) do
-    IO.inspect(assigns, label: "assigns dentro do render")
+    # IO.inspect(assigns, label: "assigns dentro do render")
 
     ~H"""
     <%!-- <.flash_messages flash={@flash} /> --%>
@@ -50,14 +50,14 @@ defmodule CajuWeb.SiteLive do
 
       <div class="mt-6 pb-5 border-b border-gray-200 dark:border-gray-500 flex items-center justify-between">
         <h2 class="text-2xl font-bold leading-7 text-gray-900 dark:text-gray-100 sm:text-3xl sm:leading-9 sm:truncate flex-shrink-0">
-          My Sites
+          Minhas tenants
         </h2>
       </div>
 
       <div class="border-t border-gray-200 pt-4 sm:flex sm:items-center sm:justify-between">
         <div class="mt-4 flex sm:ml-4 sm:mt-0">
           <a href="/sites/new" class="button">
-            + Add Website
+            + Add Tenant
           </a>
         </div>
       </div>

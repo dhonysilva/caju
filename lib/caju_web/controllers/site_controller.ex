@@ -6,7 +6,7 @@ defmodule CajuWeb.SiteController do
   alias Caju.Membership.Site
 
   plug CajuWeb.AuthorizeSiteAccess,
-       [:owner, :admin, :super_admin] when action not in [:new, :create_site]
+       [:owner, :admin, :super_admin] when action not in [:new, :create]
 
   def new(conn, _params) do
     changeset = Membership.change_site(%Site{})
@@ -28,9 +28,6 @@ defmodule CajuWeb.SiteController do
   end
 
   def show(conn, %{"id" => id}) do
-    r = conn.request_path
-    IO.inspect(r, label: "request_path dentro da action Site :show")
-    IO.inspect(conn, label: "Conn dentro da action Site :show")
     site = Membership.get_site!(id)
     render(conn, :show, site: site)
   end

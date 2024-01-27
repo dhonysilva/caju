@@ -7,9 +7,10 @@ defmodule CajuWeb.AuthorizeSiteAccess do
 
   def call(conn, allowed_roles) do
     site =
-      Repo.get_by(Caju.Membership.Site,
+      Repo.get_by(
+        Caju.Membership.Site,
         id:
-          conn.path_params["website"] || conn.path_params["website"] ||
+          conn.path_params["website"] || conn.path_params["site"] ||
             conn.path_params["id"]
       )
 
