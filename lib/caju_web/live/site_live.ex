@@ -35,16 +35,53 @@ defmodule CajuWeb.SiteLive do
   end
 
   def render(assigns) do
-    # IO.inspect(assigns, label: "assigns dentro do render")
-
     ~H"""
+    <.header>
+      Minhas tenants
+      <:actions>
+        <.link href={~p"/sites/new"}>
+          <.button>+ Add Tenant</.button>
+        </.link>
+      </:actions>
+    </.header>
+
+    <.table id="sites" rows={@sites} row_click={&JS.navigate(~p"/sites/#{&1}")}>
+      <:col :let={site} label="Name"><%= site.name %></:col>
+      <:col :let={site} label="Invite">
+        <.invitation
+          :if={site.entry_type == "invitation"}
+          site={site}
+          invitation={hd(site.invitations)}
+        />
+      </:col>
+      <:action :let={site}>
+        <div class="sr-only">
+          <.link navigate={~p"/sites/#{site}"}>Show</.link>
+        </div>
+        <.link navigate={~p"/sites/#{site}/edit"}>Edit</.link>
+      </:action>
+      <:action :let={site}>
+        <.link href={~p"/sites/#{site}"} method="delete" data-confirm="Are you sure?">
+          Delete
+        </.link>
+      </:action>
+      <%!-- <:action :let={site}>
+        <.link
+          href={~p"/sites/invitations/#{site.invitation.invitation_id}/accept"}
+          method="post"
+          data-confirm="Are you sure?"
+        >
+          Convite
+        </.link>
+      </:action> --%>
+    </.table>
     <%!-- <.flash_messages flash={@flash} /> --%>
-    <div
+    <%!-- <div
       x-data={"{selectedInvitation: null, invitationOpen: false, invitations: #{Enum.map(@invitations, &({&1.invitation.invitation_id, &1})) |> Enum.into(%{}) |> Jason.encode!}}"}
       x-on:keydown.escape.window="invitationOpen = false"
       class="container pt-6"
-    >
-      <%!-- <div class="container pt-6"> --%>
+    > --%>
+    <div class="container pt-6">
       <%!-- <PlausibleWeb.Live.Components.Visitors.gradient_defs /> --%>
       <%!-- <.upgrade_nag_screen :if={@needs_to_upgrade == {:needs_to_upgrade, :no_active_subscription}} /> --%>
 
@@ -70,7 +107,6 @@ defmodule CajuWeb.SiteLive do
               :if={site.entry_type == "invitation"}
               site={site}
               invitation={hd(site.invitations)}
-              hourly_stats={@hourly_stats[site.domain]}
             />
           <% end %>
         </ul>
@@ -88,7 +124,6 @@ defmodule CajuWeb.SiteLive do
 
   attr :site, Caju.Membership.Site, required: true
   attr :invitation, Caju.Membership.Invitation, required: true
-  attr :hourly_stats, :map, required: true
 
   def invitation(assigns) do
     ~H"""
@@ -98,23 +133,17 @@ defmodule CajuWeb.SiteLive do
       data-domain={@site.id}
       x-on:click={"invitationOpen = true; selectedInvitation = invitations['#{@invitation.invitation_id}']"}
     >
-      <div class="col-span-1 bg-white dark:bg-gray-800 rounded-lg shadow p-4 group-hover:shadow-lg cursor-pointer">
-        <div class="w-full flex items-center justify-between space-x-4">
-          <img
-            src={"/favicon/sources/#{@site.id}"}
-            onerror="this.onerror=null; this.src='/favicon/sources/placeholder';"
-            class="w-4 h-4 flex-shrink-0 mt-px"
-          />
-          <div class="flex-1 truncate -mt-px">
-            <h3 class="text-gray-900 font-medium text-lg truncate dark:text-gray-100">
-              <%= @site.id %>
-            </h3>
-          </div>
-
-          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
-            Pending invitation
-          </span>
-        </div>
+      <div class="w-full flex items-center justify-between space-x-4">
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+          Pending invitation
+        </span>
+        <.link
+          href={~p"/sites/invitations/#{@invitation.invitation_id}/accept"}
+          method="post"
+          data-confirm="Are you sure?"
+        >
+          Convite
+        </.link>
       </div>
     </li>
     """

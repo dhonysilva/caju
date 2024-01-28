@@ -187,8 +187,23 @@ defmodule Caju.Membership do
         left_join: sm in assoc(s, :memberships),
         on: sm.user_id == ^user.id,
         where: not is_nil(sm.id) or not is_nil(i.id),
-        select: s,
-        order_by: [asc: s.name],
+        select: %{
+          s
+          | entry_type:
+              selected_as(
+                fragment(
+                  """
+                  CASE
+                    WHEN ? IS NOT NULL THEN 'invitation'
+                    ELSE 'site'
+                  END
+                  """,
+                  i.id
+                ),
+                :entry_type
+              )
+        },
+        order_by: [asc: selected_as(:entry_type), asc: s.name],
         preload: [memberships: sm, invitations: i]
       )
       |> Repo.paginate(pagination_params)

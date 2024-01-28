@@ -2,6 +2,8 @@ defmodule Caju.Site.Memberships do
   import Ecto.Query, only: [from: 2]
   alias Caju.Repo
 
+  defdelegate accept_invitation(invitation_id, user), to: Caju.Site.Memberships.AcceptInvitation
+
   defdelegate create_invitation(site, inviter, invitee_email, role),
     to: Caju.Site.Memberships.CreateInvitation
 
