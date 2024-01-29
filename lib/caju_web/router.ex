@@ -38,6 +38,11 @@ defmodule CajuWeb.Router do
     end
   end
 
+  pipeline :app_layout do
+    # plug :put_root_layout, html: {CajuWeb.LayoutView, :app}
+    # plug :put_root_layout, html: {CajuWeb.Layouts, :app}
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -46,6 +51,9 @@ defmodule CajuWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    get "/hello", HelloController, :index
+    get "/hello/:messenger", HelloController, :show
   end
 
   # Other scopes may use custom stacks.
@@ -96,10 +104,26 @@ defmodule CajuWeb.Router do
 
       # Survey Live
       live "/survey", SurveyLive, :index
+
+      live "/sites", SiteLive, :index, as: :site
     end
 
     # Site
     resources "/sites", SiteController
+
+    # Resourses of Site and settings
+    get "/sites/:website/memberships/invite", Site.MembershipController, :invite_member_form
+    post "/sites/:website/memberships/invite", Site.MembershipController, :invite_member
+
+    post "/sites/invitations/:invitation_id/accept", InvitationController, :accept_invitation
+
+    post "/sites/invitations/:invitation_id/reject", InvitationController, :reject_invitation
+
+    delete "/sites/:website/invitations/:invitation_id", InvitationController, :remove_invitation
+
+    get "/:website/settings", SiteController, :settings
+    get "/:website/settings/general", SiteController, :settings_general
+    get "/:website/settings/people", SiteController, :settings_people
 
     live "/organizations", OrganizationLive.Index, :index
     live "/organizations/new", OrganizationLive.Index, :new

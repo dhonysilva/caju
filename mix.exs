@@ -50,7 +50,12 @@ defmodule Caju.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:nanoid, "~> 2.0.5"},
+      {:sentry, "~> 10.0"},
+      {:hackney, "~> 1.19"},
+      {:opentelemetry_phoenix, "~> 1.1"},
+      {:scrivener_ecto, "~> 2.0"}
     ]
   end
 

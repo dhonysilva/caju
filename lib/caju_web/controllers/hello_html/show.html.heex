@@ -1,0 +1,17 @@
+<section>
+  <%!-- The piece of code below is the Component function that coming from the hello_html view --%>
+  <.greet messenger={@messenger} />
+
+  <table>
+    <tr>
+      <th>Number</th>
+      <th>Power</th>
+    </tr>
+    <%= for number <- 1..10 do %>
+      <tr>
+        <td><%= number %></td>
+        <td><%= number * number %></td>
+      </tr>
+    <% end %>
+  </table>
+</section>

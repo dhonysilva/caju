@@ -5,9 +5,12 @@ defmodule Caju.Membership do
 
   import Ecto.Query, warn: false
   alias Caju.Membership
+  alias Caju.Accounts
   alias Caju.Repo
 
   alias Caju.Membership.Organization
+
+  @type list_opt() :: {:filter_by_domain, String.t()}
 
   @doc """
   Returns the list of organizations.
@@ -116,6 +119,110 @@ defmodule Caju.Membership do
   """
   def list_sites do
     Repo.all(Site)
+  end
+
+  def get_by_domain(name) do
+    Repo.get_by(Site, name: name)
+  end
+
+  def get_by_domain!(name) do
+    Repo.get_by!(Site, name: name)
+  end
+
+  def is_member?(user_id, site) do
+    role(user_id, site) !== nil
+  end
+
+  def role(user_id, site) do
+    Repo.one(
+      from(sm in Membership.Membership,
+        where: sm.user_id == ^user_id and sm.site_id == ^site.id,
+        select: sm.role
+      )
+    )
+  end
+
+  def get_for_user!(user_id, name, roles \\ [:owner, :admin, :viewer]) do
+    if :super_admin in roles and Accounts.is_super_admin?(user_id) do
+      get_by_domain(name)
+    else
+      user_id
+      |> get_for_user_q(name, List.delete(roles, :super_admin))
+      |> Repo.one()
+    end
+  end
+
+  defp get_for_user_q(user_id, site_id, roles) do
+    from(s in Site,
+      join: sm in Membership.Membership,
+      on: sm.site_id == s.id,
+      where: sm.user_id == ^user_id,
+      where: sm.role in ^roles,
+      where: s.id == ^site_id,
+      select: s
+    )
+  end
+
+  # @spec list(Accounts.User.t(), map(), [list_opt()]) :: Scrivener.Page.t()
+  # def list(user, _pagination_params, opts \\ []) do
+  #   _domain_filter = Keyword.get(opts, :filter_by_domain)
+
+  #   from(s in Site,
+  #     inner_join: sm in assoc(s, :memberships),
+  #     on: sm.user_id == ^user.id,
+  #     select: s,
+  #     order_by: [asc: s.name],
+  #     preload: [memberships: sm]
+  #   )
+  # end
+
+  @spec list_with_invitations(Accounts.User.t(), map(), [list_opt()]) :: Scrivener.Page.t()
+  def list_with_invitations(user, pagination_params, opts \\ []) do
+    _domain_filter = Keyword.get(opts, :filter_by_domain)
+
+    result =
+      from(s in Site,
+        left_join: i in assoc(s, :invitations),
+        on: i.email == ^user.email,
+        left_join: sm in assoc(s, :memberships),
+        on: sm.user_id == ^user.id,
+        where: not is_nil(sm.id) or not is_nil(i.id),
+        select: %{
+          s
+          | entry_type:
+              selected_as(
+                fragment(
+                  """
+                  CASE
+                    WHEN ? IS NOT NULL THEN 'invitation'
+                    ELSE 'site'
+                  END
+                  """,
+                  i.id
+                ),
+                :entry_type
+              )
+        },
+        order_by: [asc: selected_as(:entry_type), asc: s.name],
+        preload: [memberships: sm, invitations: i]
+      )
+      |> Repo.paginate(pagination_params)
+
+    # Populating `site` preload on `invitation`
+    # without requesting it from database.
+    # Necessary for invitation modals logic.
+    entries =
+      Enum.map(result.entries, fn
+        %{invitations: [invitation]} = site ->
+          site = %{site | invitations: [], memberships: []}
+          invitation = %{invitation | site: site}
+          %{site | invitations: [invitation]}
+
+        site ->
+          site
+      end)
+
+    %{result | entries: entries}
   end
 
   @doc """
